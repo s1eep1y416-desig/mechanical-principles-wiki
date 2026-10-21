@@ -1,6 +1,8 @@
 import { defineConfig } from 'vitepress'
 import mathjax3 from 'markdown-it-mathjax3'
 
+const pagesBase = process.env.GITHUB_ACTIONS ? '/mechanical-principles-wiki/' : '/'
+
 const chapter = (text: string, link: string, sections: string[]) => ({
   text,
   link,
@@ -9,13 +11,14 @@ const chapter = (text: string, link: string, sections: string[]) => ({
 })
 
 export default defineConfig({
+  base: pagesBase,
   lang: 'zh-CN',
   title: '机械原理知识库',
   description: '以《机械原理》第九版为目录骨架的机构学学习网站',
   cleanUrls: true,
   lastUpdated: true,
   head: [
-    ['link', { rel: 'icon', href: '/favicon.svg' }],
+    ['link', { rel: 'icon', href: `${pagesBase}favicon.svg` }],
     ['meta', { name: 'theme-color', content: '#0b63ce' }]
   ],
   markdown: {

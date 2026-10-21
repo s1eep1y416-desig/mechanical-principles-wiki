@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
+
 const parts = [
   {
     id: 'I', name: '机构分析基础', en: 'ANALYSIS', desc: '先看清机构怎样组成、怎样运动、力从哪里来。',
@@ -50,7 +52,7 @@ function openSearch() {
         <h1>把机械原理，<br /><span>学成一套分析方法。</span></h1>
         <p class="home-hero__lead">以《机械原理》第九版三篇十四章为骨架，把“组成—运动—受力—设计”串成可以检索、推导和复习的知识地图。</p>
         <div class="home-hero__actions">
-          <a class="btn btn--primary" href="/guide/">开始学习 <span>→</span></a>
+          <a class="btn btn--primary" :href="withBase('/guide/')">开始学习 <span>→</span></a>
           <button class="btn btn--ghost" @click="openSearch">搜索知识库 <kbd>⌘ K</kbd></button>
         </div>
         <dl class="home-hero__stats">
@@ -88,7 +90,7 @@ function openSearch() {
         <article v-for="route in routes" :key="route.title" class="route-card">
           <div class="route-card__tag">{{ route.tag }}</div><h3>{{ route.title }}</h3><p>{{ route.desc }}</p>
           <div class="route-card__steps"><span v-for="(step, i) in route.steps" :key="step">{{ step }}<i v-if="i < route.steps.length - 1">→</i></span></div>
-          <a :href="route.link" class="route-card__link">进入路线 <span>→</span></a>
+          <a :href="withBase(route.link)" class="route-card__link">进入路线 <span>→</span></a>
         </article>
       </div>
     </section>
@@ -98,7 +100,7 @@ function openSearch() {
       <div class="map">
         <div v-for="part in parts" :key="part.id" class="map-part">
           <div class="map-part__meta"><span class="map-part__roman">{{ part.id }}</span><div><h3>{{ part.name }}</h3><span>{{ part.en }}</span></div><p>{{ part.desc }}</p></div>
-          <div class="map-part__chapters"><a v-for="ch in part.chapters" :key="ch[0]" :href="`/chapters/${ch[3]}`"><b>{{ ch[0] }}</b><span><strong>{{ ch[1] }}</strong><small>{{ ch[2] }}</small></span><i>↗</i></a></div>
+          <div class="map-part__chapters"><a v-for="ch in part.chapters" :key="ch[0]" :href="withBase(`/chapters/${ch[3]}`)"><b>{{ ch[0] }}</b><span><strong>{{ ch[1] }}</strong><small>{{ ch[2] }}</small></span><i>↗</i></a></div>
         </div>
       </div>
     </section>

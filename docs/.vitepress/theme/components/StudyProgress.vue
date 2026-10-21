@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
+import { withBase } from 'vitepress'
 
 withDefaults(defineProps<{ compact?: boolean }>(), { compact: false })
 
@@ -101,7 +102,7 @@ function byGroup(group: string) {
             <span class="progress-chip__title">{{ chapter.title }}</span>
             <a
               class="progress-chip__link"
-              :href="chapter.link"
+              :href="withBase(chapter.link)"
               title="阅读本章"
               aria-label="阅读本章"
               @click.stop
@@ -115,7 +116,7 @@ function byGroup(group: string) {
     <div v-else class="progress-widget__compact">
       <div class="progress-widget__compact-head">
         <span>点击章节即可标记已读</span>
-        <a href="/chapters/">十四章总览 →</a>
+        <a :href="withBase('/chapters/')">十四章总览 →</a>
       </div>
       <div class="progress-widget__compact-grid">
         <button

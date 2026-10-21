@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { withBase } from 'vitepress'
+
 const groups = [
   { roman: '0', name: '绪论', en: 'INTRODUCTION', desc: '课程对象、研究内容与学习方法。', chapters: [['01','绪论','机器、机构、构件与零件的边界。',['术语','课程地图'],'01-introduction']] },
   { roman: 'I', name: '机构分析基础', en: 'ANALYSIS', desc: '从结构、运动、力与动力性能认识机构。', chapters: [
@@ -28,7 +30,7 @@ const groups = [
     <section v-for="group in groups" :key="group.roman" class="catalog-group">
       <header class="catalog-group__head"><span class="catalog-group__roman">{{ group.roman }}</span><div><h2>{{ group.name }}</h2><span>{{ group.en }}</span></div><p>{{ group.desc }}</p></header>
       <div class="catalog-grid">
-        <a v-for="ch in group.chapters" :key="ch[0]" :href="`/chapters/${ch[4]}`" class="catalog-card">
+        <a v-for="ch in group.chapters" :key="ch[0]" :href="withBase(`/chapters/${ch[4]}`)" class="catalog-card">
           <div class="catalog-card__top"><span class="catalog-card__num">{{ ch[0] }}</span><span class="catalog-card__arrow">↗</span></div>
           <h3>{{ ch[1] }}</h3><p>{{ ch[2] }}</p><div class="catalog-card__tags"><span v-for="tag in ch[3]" :key="tag">{{ tag }}</span></div>
         </a>
