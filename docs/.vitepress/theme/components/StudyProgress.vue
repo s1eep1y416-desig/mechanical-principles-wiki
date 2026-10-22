@@ -1,35 +1,35 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
 import { withBase } from 'vitepress'
+import { computed, onMounted, ref, watch } from 'vue'
+import { chapters, parts } from '../../data/chapters.mjs'
 
 withDefaults(defineProps<{ compact?: boolean }>(), { compact: false })
 
-const chapters = [
-  { id: '01', title: '绪论', group: '绪论', link: '/chapters/01-introduction' },
-  { id: '02', title: '机构的结构分析', group: '分析基础', link: '/chapters/02-structural-analysis' },
-  { id: '03', title: '平面机构的运动分析', group: '分析基础', link: '/chapters/03-kinematic-analysis' },
-  { id: '04', title: '平面机构的静力分析', group: '分析基础', link: '/chapters/04-static-force-analysis' },
-  { id: '05', title: '机械的动力分析', group: '分析基础', link: '/chapters/05-dynamic-analysis' },
-  { id: '06', title: '机械的平衡', group: '分析基础', link: '/chapters/06-balancing' },
-  { id: '07', title: '机械运转与速度波动', group: '分析基础', link: '/chapters/07-speed-fluctuation' },
-  { id: '08', title: '连杆机构及其设计', group: '机构设计', link: '/chapters/08-linkage-design' },
-  { id: '09', title: '凸轮机构及其设计', group: '机构设计', link: '/chapters/09-cam-design' },
-  { id: '10', title: '齿轮机构及其设计', group: '机构设计', link: '/chapters/10-gear-mechanisms' },
-  { id: '11', title: '齿轮系及其设计', group: '机构设计', link: '/chapters/11-gear-trains' },
-  { id: '12', title: '其他常用机构', group: '机构设计', link: '/chapters/12-other-mechanisms' },
-  { id: '13', title: '机械系统的方案设计', group: '方案设计', link: '/chapters/13-system-concept-design' },
-  { id: '14', title: '机器人机构及其设计', group: '方案设计', link: '/chapters/14-robot-mechanisms' }
+type Chapter = { n: number; slug: string; title: string; partName?: string }
+
+const all = chapters as Chapter[]
+const intro = all.find((c) => c.n === 1)
+
+const groups = [
+  ...(intro ? [{ name: '绪论', id: '0', list: [intro] }] : []),
+  ...parts.map((part: any) => ({
+    name: part.name,
+    id: part.id,
+    list: part.chapters.map((c: Chapter) => ({ ...c, partName: part.name }))
+  }))
 ]
 
-const groups = ['绪论', '分析基础', '机构设计', '方案设计']
 const done = ref<string[]>([])
-const storageKey = 'mpwiki-chapters-v1'
+const storageKey = 'tmmwiki-progress-v1'
 const loaded = ref(false)
 
 onMounted(() => {
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey) || '[]')
-    if (Array.isArray(saved)) done.value = saved.filter((x) => typeof x === 'string')
+    if (Array.isArray(saved)) {
+      const valid = new Set(all.map((c) => c.slug))
+      done.value = saved.filter((x) => typeof x === 'string' && valid.has(x))
+    }
   } catch {
     done.value = []
   }
@@ -46,7 +46,7 @@ watch(
 )
 
 const count = computed(() => done.value.length)
-const percent = computed(() => Math.round((count.value / chapters.length) * 100))
+const percent = computed(() => Math.round((count.value / all.length) * 100))
 
 function toggle(id: string) {
   done.value = done.value.includes(id) ? done.value.filter((x) => x !== id) : [...done.value, id]
@@ -56,8 +56,8 @@ function reset() {
   done.value = []
 }
 
-function byGroup(group: string) {
-  return chapters.filter((c) => c.group === group)
+function pad(n: number) {
+  return String(n).padStart(2, '0')
 }
 </script>
 
@@ -65,9 +65,9 @@ function byGroup(group: string) {
   <section class="progress-widget" :class="{ 'is-compact': compact }">
     <header class="progress-widget__head">
       <div>
-        <span class="progress-widget__eyebrow">LEARNING TRACKER</span>
-        <h2>把十四章，走成一条进度条</h2>
-        <p>勾选已经读完的章节，进度只保存在你的浏览器里。</p>
+        <span class="progress-widget__eyebrow">STUDY TRACKER · 三篇十四章</span>
+        <h2>{{ compact ? '把十四章，走成一条进度条' : '十四章，一章一格' }}</h2>
+        <p>勾选已经读完的章节，进度只保存在你的浏览器里，换设备不会同步。</p>
       </div>
       <div class="progress-widget__ring" :style="{ '--p': percent }">
         <span>{{ percent }}<small>%</small></span>
@@ -78,31 +78,31 @@ function byGroup(group: string) {
       <span :style="{ width: percent + '%' }" />
     </div>
     <div class="progress-widget__meta">
-      <span>已读 {{ count }} / {{ chapters.length }} 章</span>
+      <span>已读 {{ count }} / {{ all.length }} 章</span>
       <button v-if="count" @click="reset">清空进度</button>
     </div>
 
     <div v-if="!compact" class="progress-widget__groups">
-      <div v-for="group in groups" :key="group" class="progress-widget__group">
-        <span class="progress-widget__group-name">{{ group }}</span>
+      <div v-for="group in groups" :key="group.id" class="progress-widget__group">
+        <span class="progress-widget__group-name">{{ group.name }}</span>
         <div class="progress-widget__chips">
           <label
-            v-for="chapter in byGroup(group)"
-            :key="chapter.id"
+            v-for="chapter in group.list"
+            :key="chapter.slug"
             class="progress-chip"
-            :class="{ done: done.includes(chapter.id) }"
+            :class="{ done: done.includes(chapter.slug) }"
             :title="chapter.title"
           >
             <input
               type="checkbox"
-              :checked="done.includes(chapter.id)"
-              @change="toggle(chapter.id)"
+              :checked="done.includes(chapter.slug)"
+              @change="toggle(chapter.slug)"
             />
-            <span class="progress-chip__num">{{ chapter.id }}</span>
+            <span class="progress-chip__num">{{ pad(chapter.n) }}</span>
             <span class="progress-chip__title">{{ chapter.title }}</span>
             <a
               class="progress-chip__link"
-              :href="withBase(chapter.link)"
+              :href="withBase(`/chapters/${chapter.slug}`)"
               title="阅读本章"
               aria-label="阅读本章"
               @click.stop
@@ -120,16 +120,16 @@ function byGroup(group: string) {
       </div>
       <div class="progress-widget__compact-grid">
         <button
-          v-for="chapter in chapters"
-          :key="chapter.id"
+          v-for="chapter in all"
+          :key="chapter.slug"
           class="compact-chapter"
-          :class="{ done: done.includes(chapter.id) }"
+          :class="{ done: done.includes(chapter.slug) }"
           :title="chapter.title"
-          @click="toggle(chapter.id)"
+          @click="toggle(chapter.slug)"
         >
-          <b>{{ chapter.id }}</b>
+          <b>{{ pad(chapter.n) }}</b>
           <span>{{ chapter.title }}</span>
-          <i>{{ done.includes(chapter.id) ? '✓' : '+' }}</i>
+          <i>{{ done.includes(chapter.slug) ? '✓' : '+' }}</i>
         </button>
       </div>
     </div>
@@ -154,7 +154,7 @@ function byGroup(group: string) {
 
 .progress-widget__eyebrow {
   color: var(--vp-c-brand-1);
-  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-family: var(--vp-font-family-mono);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -197,7 +197,7 @@ function byGroup(group: string) {
 .progress-widget__ring span {
   z-index: 1;
   color: var(--vp-c-text-1);
-  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-family: var(--vp-font-family-mono);
   font-size: 18px;
   font-weight: 800;
   grid-area: 1 / 1;
@@ -220,7 +220,7 @@ function byGroup(group: string) {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--vp-c-brand-1), #35b6ff);
+  background: linear-gradient(90deg, var(--vp-c-brand-1), #14b8a6 70%, #d97706);
   transition: width 0.35s ease;
 }
 
@@ -250,7 +250,7 @@ function byGroup(group: string) {
 
 .progress-widget__group {
   display: grid;
-  grid-template-columns: 46px minmax(0, 1fr);
+  grid-template-columns: 56px minmax(0, 1fr);
   gap: 10px;
   align-items: start;
 }
@@ -292,8 +292,8 @@ function byGroup(group: string) {
 }
 
 .progress-chip.done {
-  border-color: rgba(34, 160, 107, 0.4);
-  background: rgba(34, 160, 107, 0.07);
+  border-color: color-mix(in srgb, var(--vp-c-brand-1) 45%, transparent);
+  background: var(--vp-c-brand-soft);
   color: var(--vp-c-text-1);
 }
 
@@ -306,12 +306,12 @@ function byGroup(group: string) {
 
 .progress-chip__num {
   color: var(--vp-c-text-3);
-  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-family: var(--vp-font-family-mono);
   font-size: 10px;
 }
 
 .progress-chip.done .progress-chip__num {
-  color: #22a06b;
+  color: var(--vp-c-brand-1);
 }
 
 .progress-chip__title {
@@ -355,7 +355,7 @@ function byGroup(group: string) {
 
 .progress-widget__compact-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 6px;
 }
 
@@ -382,14 +382,14 @@ function byGroup(group: string) {
 }
 
 .compact-chapter.done {
-  border-color: rgba(34, 160, 107, 0.4);
-  background: rgba(34, 160, 107, 0.07);
+  border-color: color-mix(in srgb, var(--vp-c-brand-1) 45%, transparent);
+  background: var(--vp-c-brand-soft);
 }
 
 .compact-chapter b {
   flex: none;
   color: var(--vp-c-brand-1);
-  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-family: var(--vp-font-family-mono);
   font-size: 9px;
   font-weight: 700;
 }
@@ -409,7 +409,7 @@ function byGroup(group: string) {
 }
 
 .compact-chapter.done i {
-  color: #22a06b;
+  color: var(--vp-c-brand-1);
 }
 
 .is-compact {
@@ -420,7 +420,7 @@ function byGroup(group: string) {
   font-size: 20px;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .progress-widget__compact-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

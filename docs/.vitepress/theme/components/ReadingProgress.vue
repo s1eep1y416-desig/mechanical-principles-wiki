@@ -54,8 +54,8 @@ watch(
 .reading-progress span {
   display: block;
   height: 100%;
-  background: linear-gradient(90deg, #0b63ce, #35b6ff 60%, #ffb020);
+  background: linear-gradient(90deg, #0f766e, #14b8a6 60%, #d97706);
   transition: width 80ms linear;
-  box-shadow: 0 0 8px rgba(53, 182, 255, 0.55);
+  box-shadow: 0 0 8px rgba(20, 184, 166, 0.45);
 }
 </style>

@@ -1,14 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="g" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#2f8cff"/>
-      <stop offset="1" stop-color="#0b4da2"/>
+    <linearGradient id="tmmBadge" x1="10" y1="6" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#115e59"/>
+      <stop offset="1" stop-color="#0f766e"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="15" fill="url(#g)"/>
-  <g fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M32 15.5v5M32 43.5v5M15.5 32h5M43.5 32h5M20.3 20.3l3.5 3.5M40.2 40.2l3.5 3.5M43.7 20.3l-3.5 3.5M23.8 40.2l-3.5 3.5"/>
-    <circle cx="32" cy="32" r="11.2"/>
-    <circle cx="32" cy="32" r="4.2" fill="#fff" stroke="none"/>
+  <rect width="64" height="64" rx="15" fill="url(#tmmBadge)"/>
+  <g fill="none" stroke="#e9fdf8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- gear ring -->
+    <circle cx="32" cy="32" r="20.5"/>
+    <path d="M32 7.5v4.2M32 52.3v4.2M6.5 32h4.2M53.3 32h4.2M14.2 14.2l3 3M46.8 46.8l3 3M49.8 14.2l-3 3M17.2 46.8l-3 3"/>
+    <!-- crank-slider linkage inside the ring -->
+    <path d="M24 41.5 33 27l12 14.5" stroke-width="2.2"/>
+    <path d="M20 46h27" stroke="#5eead4" stroke-width="1.6"/>
   </g>
+  <!-- joints: fixed pivot A, moving pin B, slider C -->
+  <circle cx="24" cy="41.5" r="2.9" fill="#fbbf24"/>
+  <circle cx="33" cy="27" r="2.5" fill="#e9fdf8"/>
+  <rect x="41.6" y="38.6" width="6.8" height="6.8" rx="1.2" fill="#06211e" stroke="#e9fdf8" stroke-width="1.8"/>
 </svg>

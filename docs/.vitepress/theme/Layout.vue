@@ -10,7 +10,7 @@ import ReadingSidebar from './components/ReadingSidebar.vue'
     <template #sidebar-nav-before>
       <div class="sidebar-heading">
         <strong>知识目录</strong>
-        <span>三篇 · 十四章 · 机构学</span>
+        <span>三篇 · 十四章 · 机构图示</span>
       </div>
     </template>
     <template #layout-top>
@@ -38,8 +38,15 @@ import ReadingSidebar from './components/ReadingSidebar.vue'
   margin-bottom: 12px;
   border-bottom: 1px solid var(--vp-c-divider);
 }
-.sidebar-heading strong { font-size: 14px; color: var(--vp-c-text-1); }
-.sidebar-heading span { font-size: 11px; color: var(--vp-c-text-3); }
+.sidebar-heading strong {
+  font-size: 14px;
+  color: var(--vp-c-text-1);
+}
+.sidebar-heading span {
+  font-size: 11px;
+  color: var(--vp-c-text-3);
+  letter-spacing: 0.02em;
+}
 .aside-end {
   display: flex;
   align-items: center;

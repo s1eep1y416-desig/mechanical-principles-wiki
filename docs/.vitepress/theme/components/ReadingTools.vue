@@ -7,7 +7,7 @@ type BgMode = 'default' | 'white' | 'black'
 const { isDark } = useData()
 const bg = ref<BgMode>('default')
 const scrolled = ref(false)
-const storageKey = 'mdwiki-bg'
+const storageKey = 'tmmwiki-bg'
 let syncing = false
 
 const showTop = computed(() => scrolled.value)
@@ -118,7 +118,7 @@ watch(isDark, (dark) => {
   border: 1px solid var(--vp-c-divider);
   border-radius: 999px;
   background: color-mix(in srgb, var(--vp-c-bg) 88%, transparent);
-  box-shadow: 0 8px 28px rgba(8, 24, 48, 0.12);
+  box-shadow: 0 8px 28px rgba(6, 32, 29, 0.14);
   backdrop-filter: blur(12px);
 }
 

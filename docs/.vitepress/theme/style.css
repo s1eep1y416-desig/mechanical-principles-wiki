@@ -1,7 +1,7 @@
 /* ==========================================================================
-   Mechanical Principles Wiki — global theme
-   A knowledge-base visual language inspired by engineering drawings:
-   grid, blueprints, measured lines, and a restrained industrial blue.
+   Theory of Machines & Mechanisms Wiki — global theme
+   Engineering-drawing visual language: blueprint grid, measured lines,
+   deep teal as the structural colour, amber for the moving part.
    ========================================================================== */
 
 :root {
@@ -10,29 +10,36 @@
   --vp-font-family-mono: 'SFMono-Regular', 'JetBrains Mono', 'Cascadia Code', Consolas,
     'Liberation Mono', monospace;
 
-  --vp-c-brand-1: #0b63ce;
-  --vp-c-brand-2: #0a56b4;
-  --vp-c-brand-3: #084a99;
-  --vp-c-brand-soft: rgba(11, 99, 206, 0.12);
+  /* Deep teal — mechanism frame */
+  --vp-c-brand-1: #0f766e;
+  --vp-c-brand-2: #0d6660;
+  --vp-c-brand-3: #115e59;
+  --vp-c-brand-soft: rgba(15, 118, 110, 0.12);
 
   --vp-c-bg: #ffffff;
-  --vp-c-bg-alt: #f7f9fc;
-  --vp-c-bg-soft: #f4f7fb;
+  --vp-c-bg-alt: #f5faf8;
+  --vp-c-bg-soft: #f0f8f6;
   --vp-c-bg-elv: #ffffff;
-  --vp-c-divider: #e4eaf2;
-  --vp-c-border: #d8e1ec;
-  --vp-c-gutter: #eef2f7;
+  --vp-c-divider: #e0ebe8;
+  --vp-c-border: #d2e1dd;
+  --vp-c-gutter: #edf4f2;
 
-  --vp-c-text-1: #172033;
-  --vp-c-text-2: #465468;
-  --vp-c-text-3: #7b8799;
+  --vp-c-text-1: #12201d;
+  --vp-c-text-2: #40534e;
+  --vp-c-text-3: #74877f;
 
-  --vp-c-tip-1: #0b63ce;
-  --vp-c-tip-soft: rgba(11, 99, 206, 0.1);
-  --vp-c-warning-1: #b76e00;
-  --vp-c-warning-soft: rgba(255, 176, 32, 0.12);
-  --vp-c-danger-1: #c43b3b;
-  --vp-c-danger-soft: rgba(196, 59, 59, 0.09);
+  --vp-c-tip-1: #0f766e;
+  --vp-c-tip-soft: rgba(15, 118, 110, 0.09);
+  --vp-c-warning-1: #b45309;
+  --vp-c-warning-soft: rgba(217, 119, 6, 0.1);
+  --vp-c-danger-1: #b91c1c;
+  --vp-c-danger-soft: rgba(185, 28, 28, 0.08);
+
+  /* Amber — the moving link / measured highlight */
+  --tmm-amber: #b45309;
+  --tmm-amber-soft: rgba(217, 119, 6, 0.12);
+  --tmm-tint: rgba(15, 118, 110, 0.06);
+  --tmm-ink: #06211e;
 
   --vp-nav-height: 64px;
   --vp-sidebar-width: 286px;
@@ -40,49 +47,54 @@
   --vp-code-line-height: 1.7;
   --vp-code-font-size: 0.85em;
 
-  --md-accent: #0b63ce;
+  --md-accent: #0f766e;
 }
 
 .dark {
-  --vp-c-brand-1: #6aa9ff;
-  --vp-c-brand-2: #8bbdff;
-  --vp-c-brand-3: #a9ceff;
-  --vp-c-brand-soft: rgba(106, 169, 255, 0.14);
+  --vp-c-brand-1: #5eead4;
+  --vp-c-brand-2: #99f6e4;
+  --vp-c-brand-3: #ccfbf1;
+  --vp-c-brand-soft: rgba(94, 234, 212, 0.14);
 
-  --vp-c-bg: #0d1117;
-  --vp-c-bg-alt: #0a0e14;
-  --vp-c-bg-soft: #141b25;
-  --vp-c-bg-elv: #161d28;
-  --vp-c-divider: #253041;
-  --vp-c-border: #2d3a4d;
-  --vp-c-gutter: #1a2230;
+  --vp-c-bg: #08110f;
+  --vp-c-bg-alt: #060d0c;
+  --vp-c-bg-soft: #0e1c19;
+  --vp-c-bg-elv: #10211d;
+  --vp-c-divider: #1d332e;
+  --vp-c-border: #28453e;
+  --vp-c-gutter: #11231f;
 
-  --vp-c-text-1: #e7edf6;
-  --vp-c-text-2: #aab7c8;
-  --vp-c-text-3: #77869a;
+  --vp-c-text-1: #e6f4f1;
+  --vp-c-text-2: #a4bfb8;
+  --vp-c-text-3: #6e8a82;
 
-  --vp-c-tip-1: #6aa9ff;
-  --vp-c-tip-soft: rgba(106, 169, 255, 0.12);
-  --vp-c-warning-1: #f0b44d;
-  --vp-c-warning-soft: rgba(240, 180, 77, 0.12);
-  --vp-c-danger-1: #f08080;
-  --vp-c-danger-soft: rgba(240, 128, 128, 0.1);
+  --vp-c-tip-1: #5eead4;
+  --vp-c-tip-soft: rgba(94, 234, 212, 0.1);
+  --vp-c-warning-1: #fbbf24;
+  --vp-c-warning-soft: rgba(251, 191, 36, 0.1);
+  --vp-c-danger-1: #fb7185;
+  --vp-c-danger-soft: rgba(251, 113, 133, 0.09);
 
-  --md-accent: #6aa9ff;
+  --tmm-amber: #fbbf24;
+  --tmm-amber-soft: rgba(251, 191, 36, 0.12);
+  --tmm-tint: rgba(94, 234, 212, 0.05);
+  --tmm-ink: #04120f;
+
+  --md-accent: #5eead4;
 }
 
-/* Explicit reading backgrounds */
+/* Explicit reading backgrounds controlled by ReadingTools */
 html[data-bg='white'] {
   --vp-c-bg: #ffffff;
-  --vp-c-bg-alt: #fafafa;
-  --vp-c-bg-soft: #f5f5f5;
+  --vp-c-bg-alt: #fafbfa;
+  --vp-c-bg-soft: #f4f7f6;
   --vp-c-bg-elv: #ffffff;
-  --vp-c-divider: #e6e6e6;
-  --vp-c-border: #d9d9d9;
+  --vp-c-divider: #e3e8e6;
+  --vp-c-border: #d6dcda;
   --vp-c-gutter: #efefef;
-  --vp-c-text-1: #111318;
-  --vp-c-text-2: #41464f;
-  --vp-c-text-3: #7a8089;
+  --vp-c-text-1: #0f1513;
+  --vp-c-text-2: #3d4643;
+  --vp-c-text-3: #757e7b;
   color-scheme: light;
 }
 
@@ -94,9 +106,9 @@ html[data-bg='black'] {
   --vp-c-divider: #202020;
   --vp-c-border: #2b2b2b;
   --vp-c-gutter: #111111;
-  --vp-c-text-1: #f4f6f8;
-  --vp-c-text-2: #b9bec7;
-  --vp-c-text-3: #858b95;
+  --vp-c-text-1: #f4f6f5;
+  --vp-c-text-2: #b9c0be;
+  --vp-c-text-3: #858d8b;
   color-scheme: dark;
 }
 
@@ -118,11 +130,11 @@ body {
 }
 
 ::selection {
-  background: rgba(11, 99, 206, 0.2);
+  background: rgba(15, 118, 110, 0.2);
 }
 
 .dark ::selection {
-  background: rgba(106, 169, 255, 0.28);
+  background: rgba(94, 234, 212, 0.24);
 }
 
 /* --------------------------------------------------------------------------
@@ -218,30 +230,45 @@ body {
   scrollbar-width: thin;
 }
 
-.VPSidebar .group + .group { border-top: 0; padding-top: 8px; }
-.VPSidebarItem.level-0 { padding-bottom: 12px; }
+.VPSidebar .group + .group {
+  border-top: 0;
+  padding-top: 8px;
+}
+.VPSidebarItem.level-0 {
+  padding-bottom: 12px;
+}
 .VPSidebarItem.level-0 > .item > .text {
   color: var(--vp-c-text-2);
   font-size: 12px;
   font-weight: 650;
   letter-spacing: 0;
 }
-.VPSidebarItem .item { border-radius: 5px; }
-.VPSidebarItem .item:hover { background: var(--vp-c-bg-soft); }
+.VPSidebarItem .item {
+  border-radius: 5px;
+}
+.VPSidebarItem .item:hover {
+  background: var(--vp-c-bg-soft);
+}
 .VPSidebarItem .text {
   padding-top: 5px;
   padding-bottom: 5px;
   font-size: 12.5px;
   line-height: 21px;
 }
-.VPSidebarItem .link { min-width: 0; }
+.VPSidebarItem .link {
+  min-width: 0;
+}
 .VPSidebarItem .link > .text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.VPSidebarItem.level-0 > .items { padding-left: 0; }
-.VPSidebarItem.level-1 > .item { padding-left: 8px; }
+.VPSidebarItem.level-0 > .items {
+  padding-left: 0;
+}
+.VPSidebarItem.level-1 > .item {
+  padding-left: 8px;
+}
 .VPSidebarItem.level-1 > .items,
 .VPSidebarItem.level-2 > .items,
 .VPSidebarItem.level-3 > .items {
@@ -250,9 +277,14 @@ body {
   border-left: 1px solid var(--vp-c-divider);
 }
 .VPSidebarItem.level-2 .text,
-.VPSidebarItem.level-3 .text { font-size: 12px; font-weight: 400; }
+.VPSidebarItem.level-3 .text {
+  font-size: 12px;
+  font-weight: 400;
+}
 .VPSidebarItem.level-2 > .item,
-.VPSidebarItem.level-3 > .item { padding-left: 4px; }
+.VPSidebarItem.level-3 > .item {
+  padding-left: 4px;
+}
 .VPSidebarItem.is-active > .item {
   background: var(--vp-c-brand-soft);
 }
@@ -267,9 +299,15 @@ body {
   margin: 0 2px 0 0;
   flex-shrink: 0;
 }
-.VPSidebarItem .caret-icon { font-size: 13px; }
-.VPSidebarItem .indicator { display: none; }
-.VPSidebarItem.level-1:not(.collapsible) > .item { padding-left: 8px; }
+.VPSidebarItem .caret-icon {
+  font-size: 13px;
+}
+.VPSidebarItem .indicator {
+  display: none;
+}
+.VPSidebarItem.level-1:not(.collapsible) > .item {
+  padding-left: 8px;
+}
 
 /* --------------------------------------------------------------------------
    Document
@@ -385,7 +423,7 @@ body {
 .vp-doc blockquote {
   margin: 22px 0;
   padding: 13px 18px;
-  border-left: 3px solid rgba(11, 99, 206, 0.45);
+  border-left: 3px solid color-mix(in srgb, var(--vp-c-brand-1) 55%, transparent);
   border-radius: 0 10px 10px 0;
   background: var(--vp-c-bg-soft);
 }
@@ -398,6 +436,69 @@ body {
 
 .vp-doc blockquote > p + p {
   margin-top: 8px;
+}
+
+/* Page lead paragraphs used by guide / appendix / about pages */
+.page-lead {
+  max-width: 720px;
+  margin: 0 0 26px;
+  color: var(--vp-c-text-2);
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.about-lead {
+  max-width: 720px;
+  margin: 4px 0 34px;
+  padding: 16px 20px;
+  border-left: 3px solid var(--vp-c-brand-1);
+  border-radius: 0 12px 12px 0;
+  background:
+    linear-gradient(100deg, var(--vp-c-brand-soft), transparent 70%),
+    var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.textbook-link {
+  margin: -6px 0 20px;
+  color: var(--vp-c-text-3);
+  font-size: 12.5px;
+}
+
+.textbook-link a {
+  color: var(--vp-c-brand-1);
+  font-weight: 600;
+}
+
+.catalog-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin: 24px 0 14px;
+  padding: 16px 20px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 12px;
+  background: var(--vp-c-bg-soft);
+}
+
+.catalog-stats div {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.catalog-stats b {
+  color: var(--vp-c-brand-1);
+  font-family: var(--vp-font-family-mono);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.catalog-stats span {
+  color: var(--vp-c-text-3);
+  font-size: 11px;
 }
 
 /* Tables ------------------------------------------------------------------ */
@@ -460,17 +561,23 @@ body {
   padding: 2px 0;
 }
 
-.vp-doc mjx-container[display="true"] {
+.vp-doc mjx-container[display='true'] {
   margin: 18px 0;
   padding: 16px 18px;
-  overflow: visible;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
   border: 1px solid var(--vp-c-divider);
   border-radius: 10px;
   background: var(--vp-c-bg-soft);
 }
 
-.vp-doc mjx-container[display="true"]::-webkit-scrollbar {
-  display: none;
+.vp-doc mjx-container[display='true']::-webkit-scrollbar {
+  height: 5px;
+}
+.vp-doc mjx-container[display='true']::-webkit-scrollbar-thumb {
+  background: var(--vp-c-divider);
+  border-radius: 3px;
 }
 
 .vp-doc p > .math {
@@ -522,8 +629,8 @@ body {
 }
 
 .vp-doc .custom-block.tip {
-  border-color: rgba(11, 99, 206, 0.2);
-  background: rgba(11, 99, 206, 0.055);
+  border-color: color-mix(in srgb, var(--vp-c-brand-1) 22%, transparent);
+  background: var(--tmm-tint);
 }
 
 .vp-doc .custom-block.tip .custom-block-title {
@@ -532,7 +639,7 @@ body {
 
 .vp-doc .custom-block.warning {
   border-color: rgba(183, 110, 0, 0.22);
-  background: rgba(255, 176, 32, 0.075);
+  background: rgba(217, 119, 6, 0.07);
 }
 
 .vp-doc .custom-block.warning .custom-block-title {
@@ -540,8 +647,8 @@ body {
 }
 
 .vp-doc .custom-block.danger {
-  border-color: rgba(196, 59, 59, 0.2);
-  background: rgba(196, 59, 59, 0.055);
+  border-color: rgba(185, 28, 28, 0.2);
+  background: rgba(185, 28, 28, 0.05);
 }
 
 .vp-doc .custom-block.info {
@@ -550,11 +657,25 @@ body {
 }
 
 .dark .vp-doc .custom-block.tip {
-  background: rgba(106, 169, 255, 0.08);
+  background: rgba(94, 234, 212, 0.07);
 }
 
 .dark .vp-doc .custom-block.warning {
-  background: rgba(240, 180, 77, 0.07);
+  background: rgba(251, 191, 36, 0.06);
+}
+
+/* Figures produced by MechFigure ----------------------------------------- */
+
+.vp-doc figure {
+  margin: 26px 0;
+}
+
+.vp-doc figcaption {
+  margin-top: 10px;
+  color: var(--vp-c-text-3);
+  font-size: 11.5px;
+  line-height: 1.6;
+  text-align: center;
 }
 
 /* --------------------------------------------------------------------------
@@ -705,7 +826,7 @@ body {
   border: 1px solid var(--vp-c-border);
   border-radius: 14px;
   background: var(--vp-c-bg);
-  box-shadow: 0 25px 80px rgba(5, 18, 40, 0.22);
+  box-shadow: 0 25px 80px rgba(3, 24, 20, 0.22);
 }
 
 .VPLocalSearchBox .search-bar {
@@ -770,6 +891,20 @@ body {
   .VPNavBarTitle .title {
     font-size: 14px;
   }
+
+  .page-lead {
+    font-size: 14px;
+  }
+
+  .about-lead {
+    padding: 13px 15px;
+    font-size: 13.5px;
+  }
+
+  .catalog-stats {
+    gap: 20px;
+    padding: 13px 16px;
+  }
 }
 
 /* Print: make the notes actually useful on paper */
@@ -779,7 +914,8 @@ body {
   .VPDocAside,
   .VPDocFooter,
   .VPFooter,
-  .reading-progress {
+  .reading-progress,
+  .reading-tools {
     display: none !important;
   }
 
@@ -789,6 +925,7 @@ body {
 
   .vp-doc {
     font-size: 11pt;
+    color: #111;
   }
 
   .vp-doc h2 {
@@ -796,7 +933,13 @@ body {
   }
 
   .vp-doc table,
-  .vp-doc .custom-block {
+  .vp-doc .custom-block,
+  .vp-doc figure {
     break-inside: avoid;
+  }
+
+  .vp-doc mjx-container[display='true'] {
+    border: 0;
+    background: transparent;
   }
 }
