@@ -59,7 +59,7 @@ function openSearch() {
           <div><dt>14</dt><dd>章 · 教材主线</dd></div>
           <div><dt>3</dt><dd>篇 · 分析到综合</dd></div>
           <div><dt>415</dt><dd>页 · 扫描教材</dd></div>
-          <div><dt>10</dt><dd>类 · 原理图解</dd></div>
+          <div><dt>75</dt><dd>节 · 教材小节</dd></div>
         </dl>
       </div>
 

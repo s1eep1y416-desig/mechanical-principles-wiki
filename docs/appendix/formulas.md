@@ -12,6 +12,7 @@ description: 机械原理常用公式及适用条件
 | 主题 | 公式 | 条件与说明 |
 |---|---|---|
 | 平面机构自由度 | $F=3n-2P_L-P_H$ | 普通平面机构；先处理局部自由度、虚约束等 |
+| 瞬心总数 | $K=N(N-1)/2$ | $N$ 含机架；只用于瞬时速度关系 |
 | 刚体相对速度 | $\vec v_B=\vec v_A+\vec\omega\times\vec r_{BA}$ | A、B 属于同一刚体 |
 | 法向加速度 | $a^n=\omega^2r$ | 指向相对转动中心 |
 | 切向加速度 | $a^t=\alpha r$ | 垂直于构件 |
@@ -26,6 +27,7 @@ description: 机械原理常用公式及适用条件
 | 机械效率 | $\eta=W_r/W_d=P_r/P_d$ | 输入与输出取同一时间区间 |
 | 惯性力 | $\vec F_I=-m\vec a_S$ | 施加于质心的达朗贝尔等效力 |
 | 惯性力偶 | $M_I=-J_S\alpha$ | 绕质心 |
+| 动静法平衡 | $\sum\vec F+\vec F_I=0,\ \sum M_S+M_I=0$ | 惯性力是计算等效量 |
 | 静平衡 | $\sum m_i\vec r_i=0$ | 合离心惯性力为零 |
 | 动平衡 | $\sum m_i\vec r_i=0,\ \sum m_i\vec r_il_i=0$ | 合力与合力偶都为零 |
 
@@ -36,18 +38,23 @@ description: 机械原理常用公式及适用条件
 | 能量形式运动方程 | $d(J_e\omega^2/2)/dt=P_d-P_r$ | 等效到同一构件；$J_e$ 可随位置变化 |
 | 速度不均匀系数 | $\delta=(\omega_{max}-\omega_{min})/\omega_m$ | 周期性速度波动 |
 | 飞轮惯量近似 | $J_F\approx\Delta E_{max}/(\omega_m^2\delta)$ | 小幅速度波动的常用近似 |
+| 等效转动惯量 | $J_e=\sum J_i(\omega_i/\omega)^2+\sum m_j(v_j/\omega)^2$ | 各构件动能等效到同一转动构件 |
 
 ## 连杆、凸轮与齿轮
 
 | 主题 | 公式 | 条件与说明 |
 |---|---|---|
 | Grashof 条件 | $s+l\le p+q$ | 四杆机构存在整转副的几何条件 |
+| 行程速比系数 | $K=(180^\circ+\theta)/(180^\circ-\theta)$ | 曲柄匀速、$\theta$ 为极位夹角 |
 | 凸轮从动件速度 | $v=\omega\,ds/d\varphi$ | 凸轮角速度恒定 |
 | 凸轮从动件加速度 | $a=\omega^2d^2s/d\varphi^2$ | 凸轮角速度恒定 |
 | 分度圆直径 | $d=mz$ | 圆柱齿轮标准参数关系 |
+| 标准中心距 | $a=m(z_1+z_2)/2$ | 标准外啮合直齿轮 |
 | 基圆半径 | $r_b=r\cos\alpha$ | 渐开线齿轮 |
 | 外啮合齿轮比 | $i_{12}=\omega_1/\omega_2=-z_2/z_1$ | 负号表示转向相反 |
 | 行星轮系 | $(\omega_1-\omega_H)/(\omega_3-\omega_H)=-z_3/z_1$ | 典型 2K-H，1 与 3 对行星轮一外一内啮合 |
+| 斜齿轮模数换算 | $m_t=m_n/\cos\beta$ | 法面参数通常为标准值 |
+| 斜齿轮当量齿数 | $z_v=z/\cos^3\beta$ | 根切与近似强度分析 |
 
 ## 机器人机构
 
@@ -55,3 +62,4 @@ description: 机械原理常用公式及适用条件
 |---|---|---|
 | 速度映射 | $\dot{\boldsymbol x}=J(\boldsymbol q)\dot{\boldsymbol q}$ | 雅可比随位形变化 |
 | 静力映射 | $\boldsymbol\tau=J^T\boldsymbol F$ | 虚功原理下的理想关系 |
+| 二连杆径向可达范围 | $|l_1-l_2|\le r\le l_1+l_2$ | 仅考虑二维位置与理想关节范围 |
