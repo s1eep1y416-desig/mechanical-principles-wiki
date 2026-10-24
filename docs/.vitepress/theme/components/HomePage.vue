@@ -26,7 +26,7 @@ const counts = {
   chapters: stats.chapters,
   parts: stats.parts,
   formulas: stats.formulas,
-  figures: 18
+  figures: 25
 }
 
 const routes = [
@@ -222,6 +222,7 @@ const year = new Date().getFullYear()
           <div><dt>{{ counts.parts }}</dt><dd>篇 · 知识分区</dd></div>
           <div><dt>{{ counts.formulas }}</dt><dd>张 · 核心公式卡</dd></div>
           <div><dt>{{ counts.figures }}</dt><dd>张 · 机构图示</dd></div>
+          <div><dt>13</dt><dd>个 · 交互实验</dd></div>
         </dl>
       </div>
 
@@ -316,6 +317,8 @@ const year = new Date().getFullYear()
         <span>JACOBIAN</span>
       </div>
     </section>
+
+    <a class="studio-entry" :href="withBase('/labs/')"><strong>进入图解与实验 →</strong><span>13 个可操作实验：齿轮、链条、凸轮、连杆、受力与机器人</span></a>
 
     <!-- ========================================================== routes -->
     <section class="home-section">
@@ -1742,4 +1745,8 @@ const year = new Date().getFullYear()
     transition: none;
   }
 }
+</style>
+
+<style scoped>
+.studio-entry{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding:22px 28px;margin:24px 0;border:1px solid var(--vp-c-brand-1);border-radius:14px;background:var(--vp-c-brand-soft);color:var(--vp-c-text-1);text-decoration:none}.studio-entry span{font-size:13px;color:var(--vp-c-text-2)}
 </style>

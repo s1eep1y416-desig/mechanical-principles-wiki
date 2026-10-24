@@ -100,10 +100,10 @@ test('tooth flanks do not cross through a full tooth engagement cycle',async()=>
     return points.map((p,i)=>[p,points[(i+1)%points.length]]).filter(([a,b])=>Math.max(a.x,b.x)>282 && Math.min(a.x,b.x)<298)
   }
   const orientation=(a,b,c)=>cross(vector(a,b),vector(a,c))
-  for(let step=0;step<24;step++){
+  for(const z of [36,48])for(let step=0;step<24;step++){
     const theta=step/24*2*Math.PI/24
     const left=polygon(gearGeometry(200,230,24,7.5,-Math.PI/48+theta))
-    const right=polygon(gearGeometry(425,230,36,7.5,Math.PI-Math.PI/72-theta*24/36))
+    const right=polygon(gearGeometry(290+z*3.75,230,z,7.5,Math.PI-Math.PI/(2*z)-theta*24/z))
     for(const [a,b] of left)for(const [c,d] of right){
       const crossBoth=orientation(a,b,c)*orientation(a,b,d)<-1e-7 && orientation(c,d,a)*orientation(c,d,b)<-1e-7
       assert.ok(!crossBoth,`Tooth outlines intersect at phase ${step}`)

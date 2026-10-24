@@ -1,0 +1,50 @@
+.lab-svg { --blue:#2275be;--green:#147f66;--amber:#b37919;--red:#cb4f50;--purple:#8760bd;--ink:#344b60;--paper:var(--vp-c-bg);--metal-a:#e7eef4;--metal-b:#aabccc;--metal-c:#71869b;--blue-light:#beddf7;--blue-dark:#608fba;--green-light:#bee6d8;--green-dark:#579a85;background:var(--paper);color:var(--vp-c-text-1);overflow:visible;}
+.dark .lab-svg {--blue:#8ac8ff;--green:#81dabc;--amber:#f0c476;--red:#ff9494;--purple:#cab1ff;--ink:#b9cada;--metal-a:#7f96ac;--metal-b:#4c6379;--metal-c:#273e52;--blue-light:#7faccf;--blue-dark:#244b72;--green-light:#8dbbab;--green-dark:#28594e;}
+.lab-svg text {font:15px var(--vp-font-family-base);fill:var(--vp-c-text-1);}
+.lab-svg .heading {font-size:20px;font-weight:650;letter-spacing:.01em;}
+.lab-svg .metric {font-size:25px;font-weight:650;font-variant-numeric:tabular-nums;}
+.lab-svg .small {font-size:13px;fill:var(--vp-c-text-2);}
+.lab-svg .tiny {font-size:11px;fill:var(--vp-c-text-2);}
+.lab-svg .label {font-weight:600;paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round;}
+.lab-svg .blue-text {fill:var(--blue)} .lab-svg .green-text {fill:var(--green)} .lab-svg .amber-text{fill:var(--amber)} .lab-svg .red-text{fill:var(--red)}
+.lab-svg .blue-line{stroke:var(--blue)} .lab-svg .green-line{stroke:var(--green)} .lab-svg .amber-line{stroke:var(--amber)} .lab-svg .red-line{stroke:var(--red)} .lab-svg .purple-line{stroke:var(--purple)}
+.lab-svg .grid{stroke:var(--vp-c-divider);stroke-width:.45;opacity:.36;fill:none}
+.lab-svg .hatch{stroke:var(--ink);stroke-width:1;opacity:.55;fill:none}
+.lab-svg .outline{stroke:var(--ink);stroke-width:1.3;stroke-linejoin:round}
+.lab-svg .fine{fill:none;stroke:var(--ink);stroke-width:1;opacity:.7}
+.lab-svg .metal-shadow{fill:var(--metal-c);stroke:var(--metal-c);stroke-width:2}
+.lab-svg .bore{fill:var(--paper);stroke:var(--ink);stroke-width:1.5}
+.lab-svg .bore-glint{fill:none;stroke:var(--metal-a);stroke-width:1;opacity:.7}
+.lab-svg .key{fill:var(--paper);stroke:var(--ink);stroke-width:1}
+.lab-svg .witness{stroke:var(--paper);stroke-width:2.5;opacity:.8}
+.lab-svg .pitch{fill:none;stroke:var(--blue);stroke-width:1;stroke-dasharray:12 4 2 4;opacity:.75}
+.lab-svg .base{fill:none;stroke:var(--amber);stroke-width:1;stroke-dasharray:3 5;opacity:.6}
+.lab-svg .axis{fill:none;stroke:var(--ink);stroke-width:.8;stroke-dasharray:12 4 2 4;opacity:.5}
+.lab-svg .divider{stroke:var(--vp-c-divider);stroke-width:1}
+.lab-svg .vector{fill:none;stroke-width:2.5;stroke-linecap:round}
+.lab-svg .cursor{stroke:var(--red);stroke-width:1;stroke-dasharray:3 3;opacity:.8}
+.lab-svg .chart-bg,.lab-svg .panel{fill:var(--vp-c-bg-soft);stroke:var(--vp-c-divider);stroke-width:1}
+.lab-svg .joint{fill:var(--metal-a);stroke:var(--ink);stroke-width:2}
+.lab-svg .bolt{fill:var(--metal-c);stroke:var(--metal-a);stroke-width:1}
+.lab-svg .bearing{fill:var(--vp-c-bg-soft);stroke:var(--ink);stroke-width:1.5}
+.lab-svg .rod-shadow{stroke:var(--metal-c);stroke-width:25;stroke-linecap:round;fill:none}
+.lab-svg .rod{stroke:var(--blue);stroke-width:19;stroke-linecap:round;fill:none}
+.lab-svg .rod-core{stroke:var(--metal-a);stroke-width:4;stroke-linecap:round;fill:none;opacity:.75}
+.lab-svg .note-bg{fill:var(--vp-c-brand-soft)}
+.lab-svg .ghost{opacity:.2}
+.lab-svg .dimension{stroke:var(--ink);stroke-width:1;fill:none}
+.lab-svg .ground{stroke:var(--ink);stroke-width:2;fill:none}
+.lab-svg .halo{paint-order:stroke;stroke:var(--paper);stroke-width:4px;stroke-linejoin:round}
+.mechanism-lab-controls {padding:16px 18px;background:var(--vp-c-bg-soft);border-bottom:1px solid var(--vp-c-divider);display:grid;gap:13px}
+.mechanism-lab-controls .lab-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.mechanism-lab-controls .lab-row label{font-size:13px;min-width:130px;display:flex;align-items:center;gap:8px}
+.mechanism-lab-controls input[type=range]{flex:1;min-width:130px;accent-color:var(--vp-c-brand-1)}
+.mechanism-lab-controls output{font-size:12px;min-width:65px;text-align:right;font-variant-numeric:tabular-nums}
+.mechanism-lab-controls button,.mechanism-lab-controls select{border:1px solid var(--vp-c-divider);background:var(--vp-c-bg);border-radius:7px;padding:5px 11px;color:var(--vp-c-text-1);font-size:13px;cursor:pointer}
+.mechanism-lab-controls button[aria-pressed=true]{border-color:var(--vp-c-brand-1);background:var(--vp-c-brand-soft);color:var(--vp-c-brand-1)}
+.mechanism-lab-controls :is(button,input,select):focus-visible{outline:2px solid var(--vp-c-brand-1);outline-offset:3px}
+.mechanism-lab-controls .primary{color:var(--vp-c-brand-1)}
+.mechanism-lab-controls .lab-hint{font-size:11px;color:var(--vp-c-text-2);margin-left:auto}
+.mechanism-lab-controls .parameters{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:1100px){dialog .mechanism-lab-controls .parameters{grid-template-columns:1fr 1fr;column-gap:28px}}
+@media(max-width:600px){.mechanism-lab-controls{padding:14px}.mechanism-lab-controls .lab-hint{margin-left:0;width:100%}.mechanism-lab-controls .lab-row label{min-width:100px}}

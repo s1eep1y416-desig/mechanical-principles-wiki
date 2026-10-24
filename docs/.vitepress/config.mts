@@ -10,6 +10,7 @@ const sidebar = [
   {
     text: '开始之前',
     items: [
+      { text: '图解与实验', link: '/labs/' },
       { text: '使用指南', link: '/guide/' },
       { text: '教材目录与页码', link: '/guide/textbook' },
       { text: '学习路线', link: '/guide/roadmap' },
@@ -149,6 +150,7 @@ export default defineConfig({
     logo: '/logo.svg',
     siteTitle: '机械原理知识库',
     nav: [
+      { text: '图解与实验', link: '/labs/' },
       { text: '首页', link: '/' },
       { text: '学习指南', link: '/guide/' },
       { text: '十四章', link: '/chapters/' },

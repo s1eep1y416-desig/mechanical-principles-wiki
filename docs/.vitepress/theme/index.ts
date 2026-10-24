@@ -12,6 +12,9 @@ import MechFigure from './components/MechFigure.vue'
 import EngineeringDiagram from './components/EngineeringDiagram.vue'
 import LinkageLab from './components/LinkageLab.vue'
 import LegacyRoute from './components/LegacyRoute.vue'
+import MechanismLab from './components/MechanismLab.vue'
+import DetailPlate from './components/DetailPlate.vue'
+import LabGallery from './components/LabGallery.vue'
 import './style.css'
 
 export default {
@@ -29,5 +32,8 @@ export default {
     app.component('EngineeringDiagram', EngineeringDiagram)
     app.component('LinkageLab', LinkageLab)
     app.component('LegacyRoute', LegacyRoute)
+    app.component('MechanismLab', MechanismLab)
+    app.component('DetailPlate', DetailPlate)
+    app.component('LabGallery', LabGallery)
   }
 } satisfies Theme

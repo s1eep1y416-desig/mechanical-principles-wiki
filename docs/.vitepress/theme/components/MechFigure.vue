@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import EngineeringDiagram from './EngineeringDiagram.vue'
+import DetailPlate from './DetailPlate.vue'
+const detailed = ['motion-pairs','cam-types','rotor-balance','intermittent','robot-arm']
 const upgraded: Record<string,string> = {'gear-mesh':'gear','gear-train':'geartrain','cam-profile':'cam','friction-wedge':'wedge','involute':'involute','four-bar-types':'linkage-types','quick-return':'quick','crank-slider':'slider-angle'}
 
 const props = withDefaults(
@@ -140,7 +142,8 @@ const sfBottom = computed(() => chart((x) => 1 + 0.06 * Math.sin(2 * Math.PI * x
 </script>
 
 <template>
-  <EngineeringDiagram v-if="upgraded[type]" :type="upgraded[type]" :caption="caption" />
+  <DetailPlate v-if="detailed.includes(type)" :type="type" :caption="caption" />
+  <EngineeringDiagram v-else-if="upgraded[type]" :type="upgraded[type]" :caption="caption" />
   <figure v-else class="mech-figure" :data-figure-type="type">
     <!-- ============================================================ 运动副 -->
     <svg v-if="type === 'motion-pairs'" viewBox="0 0 720 380" role="img" aria-label="转动副、移动副与高副简图">

@@ -24,7 +24,7 @@ onBeforeUnmount(() => { pause(); document.removeEventListener('visibilitychange'
 </script>
 
 <template>
-  <DiagramFrame title="连杆实验台：拖动输入角，观察真实闭环运动" caption="理想平面刚性机构，铰链无间隙；只演示位置与速度关系。载荷、惯性、摩擦和弹性变形未加入此模型。动画由你启动，切换页面或后台时自动暂停。">
+  <DiagramFrame eyebrow="交互实验" title="连杆实验台：拖动输入角，观察真实闭环运动" caption="理想平面刚性机构，铰链无间隙；只演示位置与速度关系。载荷、惯性、摩擦和弹性变形未加入此模型。动画由你启动，切换页面或后台时自动暂停。">
     <div class="lab-controls">
       <div class="modes" role="group" aria-label="机构类型">
         <button :aria-pressed="mode === 'fourbar'" @click="mode = 'fourbar'; reset()">曲柄摇杆</button>
@@ -48,10 +48,14 @@ onBeforeUnmount(() => { pause(); document.removeEventListener('visibilitychange'
           <path :d="linePath([pose.O1,pose.O2])" class="axis"/>
           <path v-if="showTrace" :d="pose.trace" class="trace"/>
           <path :d="linePath([pose.A,pose.C,pose.B], true)" class="coupler"/>
+          <path v-for="p in [pose.O1,pose.O2]" :d="`M${p.x-16} ${p.y+11}L${p.x} ${p.y-8}L${p.x+16} ${p.y+11}Z`" class="mount"/>
+          <path v-for="pair in [[pose.O1,pose.A],[pose.A,pose.B],[pose.B,pose.O2]]" :d="linePath(pair)" class="bar-shadow"/>
           <path :d="linePath([pose.O1,pose.A])" class="bar input-bar"/>
           <path :d="linePath([pose.A,pose.B])" class="bar connecting-bar"/>
           <path :d="linePath([pose.B,pose.O2])" class="bar output-bar"/>
-          <circle v-for="(p,n) in [pose.O1,pose.A,pose.B,pose.O2]" :key="n" :cx="p.x" :cy="p.y" r="6" class="joint" :data-joint="['O1','A','B','O2'][n]"/>
+          <path v-for="pair in [[pose.O1,pose.A],[pose.A,pose.B],[pose.B,pose.O2]]" :d="linePath(pair)" class="bar-glint"/>
+          <circle v-for="(p,n) in [pose.O1,pose.A,pose.B,pose.O2]" :key="n" :cx="p.x" :cy="p.y" r="8" class="joint" :data-joint="['O1','A','B','O2'][n]"/>
+          <circle v-for="p in [pose.O1,pose.A,pose.B,pose.O2]" :cx="p.x" :cy="p.y" r="3" class="pin"/>
           <circle :cx="pose.C.x" :cy="pose.C.y" r="4" class="trace-point"/>
           <text x="96" y="296">O₁</text><text x="350" y="296">O₂</text><text :x="pose.A.x-20" :y="pose.A.y-10">A</text><text :x="pose.B.x+10" :y="pose.B.y-8">B</text><text :x="pose.C.x+6" :y="pose.C.y-7" class="purple">C</text>
           <path :d="arcPath(120,300,42,rad(260),rad(205))" class="rotation" :marker-end="`url(#${id}-arrow)`"/>
@@ -68,8 +72,12 @@ onBeforeUnmount(() => { pause(); document.removeEventListener('visibilitychange'
           <path d="M180 265H402M180 315H402" class="ground"/><rect x="180" y="316" width="222" height="12" :fill="`url(#${id}-ground)`"/>
           <path d="M45 290H414" class="axis"/><path d="M72 306H108" class="ground"/>
           <rect :x="slider.B.x-20" :y="slider.B.y-23" width="40" height="46" rx="4" class="slider"/>
+          <path :d="`M${slider.O.x-17} 306L${slider.O.x} 277L${slider.O.x+17} 306Z`" class="mount"/>
+          <path v-for="pair in [[slider.O,slider.A],[slider.A,slider.B]]" :d="linePath(pair)" class="bar-shadow"/>
           <path :d="linePath([slider.O,slider.A])" class="bar input-bar"/><path :d="linePath([slider.A,slider.B])" class="bar connecting-bar"/>
-          <circle v-for="(p,n) in [slider.O,slider.A,slider.B]" :key="n" :cx="p.x" :cy="p.y" r="6" class="joint" :data-joint="['O','A','B'][n]"/>
+          <path v-for="pair in [[slider.O,slider.A],[slider.A,slider.B]]" :d="linePath(pair)" class="bar-glint"/>
+          <circle v-for="(p,n) in [slider.O,slider.A,slider.B]" :key="n" :cx="p.x" :cy="p.y" r="8" class="joint" :data-joint="['O','A','B'][n]"/>
+          <circle v-for="p in [slider.O,slider.A,slider.B]" :cx="p.x" :cy="p.y" r="3" class="pin"/>
           <text x="70" y="286">O</text><text :x="slider.A.x-20" :y="slider.A.y-10">A</text><text :x="slider.B.x-5" y="345">B</text>
           <path :d="arcPath(90,290,46,rad(260),rad(205))" class="rotation" :marker-end="`url(#${id}-arrow)`"/>
           <path :d="`M${slider.B.x} 240h${-slider.vB.x}`" class="velocity" :marker-end="Math.abs(slider.vB.x)>0.5 ? `url(#${id}-arrow)` : undefined"/><text :x="slider.B.x-10" y="225" class="small">vB</text>
@@ -99,7 +107,8 @@ button:focus-visible,input:focus-visible { outline:2px solid var(--vp-c-brand-1)
 text { font:14px var(--vp-font-family-base); fill:var(--vp-c-text-1); paint-order:stroke; stroke:var(--paper); stroke-width:3px; }.heading { font-size:17px; font-weight:650; }.small { font-size:12px; fill:var(--vp-c-text-2); }.green { fill:var(--green); }.purple { fill:var(--purple); }
 .grid { fill:none; stroke:var(--vp-c-divider); stroke-width:.4; opacity:.35; }.ground { fill:none; stroke:var(--steel); stroke-width:1.5; }.axis { stroke:var(--steel); stroke-width:1; stroke-dasharray:10 4 2 4; fill:none; }
 .trace { fill:none; stroke:var(--purple); stroke-width:1.5; stroke-dasharray:4 4; opacity:.7; }.coupler { fill:color-mix(in srgb,var(--purple) 9%,transparent); stroke:var(--purple); stroke-width:1.2; }.trace-point { fill:var(--purple); }
-.bar { stroke-width:10; stroke-linecap:round; }.input-bar { stroke:var(--blue); }.connecting-bar { stroke:var(--steel); }.output-bar { stroke:var(--green); }.joint { fill:var(--paper); stroke:var(--blue); stroke-width:2; }.slider { fill:color-mix(in srgb,var(--steel) 12%,var(--paper)); stroke:var(--steel); stroke-width:2; }
+.bar-shadow {fill:none;stroke:var(--steel);stroke-width:18;stroke-linecap:round;} .bar-glint {fill:none;stroke:var(--paper);stroke-width:3;stroke-linecap:round;opacity:.55;} .pin {fill:var(--steel);} .mount {fill:var(--vp-c-bg-soft);stroke:var(--steel);stroke-width:1.5;}
+.bar { stroke-width:13; stroke-linecap:round; }.input-bar { stroke:var(--blue); }.connecting-bar { stroke:var(--steel); }.output-bar { stroke:var(--green); }.joint { fill:var(--paper); stroke:var(--blue); stroke-width:2; }.slider { fill:color-mix(in srgb,var(--steel) 12%,var(--paper)); stroke:var(--steel); stroke-width:2; }
 .rotation,.velocity { stroke:var(--blue); stroke-width:2; fill:none; }.arrow { fill:var(--blue); }.divider { stroke:var(--vp-c-divider); }
 @media(max-width:600px) { .playback label { margin-left:0; } }
 </style>
