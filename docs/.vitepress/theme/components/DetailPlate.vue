@@ -1,24 +1,36 @@
 <script setup lang="ts">
-import {useId} from 'vue'
+import {computed,useId} from 'vue'
 import DiagramFrame from './DiagramFrame.vue'
 import MachineDefs from './labs/MachineDefs.vue'
 import GearWheel from './labs/GearWheel.vue'
 import HelicalGear from './labs/HelicalGear.vue'
-import {gearGeometry,point,linePath,rad,solveFourbar} from '../utils/mechanics.mjs'
+import {point,linePath} from '../utils/mechanics.mjs'
+import {plateSnapshot} from '../utils/plate-models.mjs'
 import './labs/mechanism-labs.css'
-const props=defineProps<{type:string;caption?:string}>()
+const props=withDefaults(defineProps<{type:string;caption?:string;params?:Record<string,number>}>(),{params:()=>({})})
 const id='plate-'+useId().replace(/:/g,'')
 const titles:Record<string,string>={
   system:'从电机到执行件：看见完整传动链',mobility:'拆开四杆机构：构件、转动副与自由度',instant:'纯滚动轮的瞬心与速度场',
   gearstructure:'齿轮结构剖读：齿廓、轮毂、键与轴',helical:'斜齿轮：螺旋线、法面与轴向力',belt:'带传动：包角、张紧与转矩传递',frames:'2R 机械臂的局部坐标系',
   'motion-pairs':'运动副结构与接触部位', 'cam-types':'推杆端部结构与接触形式','rotor-balance':'单面与双面平衡：力平衡还不够','intermittent':'棘轮与槽轮：驱动件、止回件和锁止件','robot-arm':'六轴机械臂：手臂定位与手腕定向'
 }
-const bar=solveFourbar({a:64,b:185,c:130,d:220},rad(62),{x:160,y:310})
+const model=computed(()=>plateSnapshot(props.type,props.params))
+const bar=computed(()=>model.value.type==='mobility'?model.value.bar:plateSnapshot('mobility').bar)
 const ratchet=linePath(Array.from({length:24},(_,i)=>[point(0,0,95,i*Math.PI/12),point(0,0,78,i*Math.PI/12+.02),point(0,0,78,i*Math.PI/12+.12)]).flat(),true)
-const gear=gearGeometry(0,0,28,7,0)
-const beltAngle=Math.asin(35/275)
-const beltPts=[{x:150-55*Math.sin(beltAngle),y:220-55*Math.cos(beltAngle)},{x:425-90*Math.sin(beltAngle),y:220-90*Math.cos(beltAngle)},{x:425-90*Math.sin(beltAngle),y:220+90*Math.cos(beltAngle)},{x:150-55*Math.sin(beltAngle),y:220+55*Math.cos(beltAngle)}]
-const beltPath='M'+beltPts[0].x+' '+beltPts[0].y+'L'+beltPts[1].x+' '+beltPts[1].y+'A90 90 0 1 1 '+beltPts[2].x+' '+beltPts[2].y+'L'+beltPts[3].x+' '+beltPts[3].y+'A55 55 0 0 1 '+beltPts[0].x+' '+beltPts[0].y+'Z'
+const gearViewModule=computed(()=>Math.min(8,280/model.value.teeth))
+const beltView=computed(()=>{
+  const scale=Math.min(.72,355/model.value.centerDistance),r1=model.value.smallDiameter*scale/2,r2=model.value.largeDiameter*scale/2
+  const x1=145,x2=x1+model.value.centerDistance*scale,y=225,angle=Math.asin((r2-r1)/(x2-x1))
+  const pts=[{x:x1-r1*Math.sin(angle),y:y-r1*Math.cos(angle)},{x:x2-r2*Math.sin(angle),y:y-r2*Math.cos(angle)},{x:x2-r2*Math.sin(angle),y:y+r2*Math.cos(angle)},{x:x1-r1*Math.sin(angle),y:y+r1*Math.cos(angle)}]
+  const path='M'+pts[0].x+' '+pts[0].y+'L'+pts[1].x+' '+pts[1].y+'A'+r2+' '+r2+' 0 1 1 '+pts[2].x+' '+pts[2].y+'L'+pts[3].x+' '+pts[3].y+'A'+r1+' '+r1+' 0 0 1 '+pts[0].x+' '+pts[0].y+'Z'
+  return {x1,x2,y,r1,r2,path}
+})
+const frameView=computed(()=>{
+  const base={x:150,y:365},scale=Math.min(1,430/(model.value.link1+model.value.link2))
+  const elbow={x:base.x+model.value.elbow.x*scale,y:base.y-model.value.elbow.y*scale}
+  const end={x:base.x+model.value.end.x*scale,y:base.y-model.value.end.y*scale}
+  return {base,elbow,end,joints:[{...base,rotation:-model.value.theta1},{...elbow,rotation:-(model.value.theta1+model.value.theta2)},{...end,rotation:-(model.value.theta1+model.value.theta2)}]}
+})
 const robotPts=[{x:220,y:410},{x:220,y:320},{x:310,y:155},{x:485,y:199},{x:524,y:220},{x:557,y:239},{x:583,y:255}]
 const marker=(c:string)=>'url(#'+id+'-'+c+'-arrow)'
 </script>
@@ -48,7 +60,8 @@ const marker=(c:string)=>'url(#'+id+'-'+c+'-arrow)'
           <text x="24" y="298">曲柄滑块执行件</text><text x="0" y="326" class="small">转动 → 往复运动与工作力</text>
         </g>
         <path :d="d" v-for="d in ['M240 80H285','M585 80H645']" class="green-line vector" :marker-end="marker('green')"/>
-        <text x="42" y="482" class="small">结构层：零件装成构件　运动层：运动副形成约束　能量层：输入功克服负载与损耗</text>
+        <text x="42" y="470" class="small">输入 {{ model.inputSpeed.toFixed(0) }} r/min、{{ model.inputTorque.toFixed(1) }} N·m → i={{ model.ratio.toFixed(1) }}、η={{ model.efficiency.toFixed(2) }} → 输出 {{ model.outputSpeed.toFixed(1) }} r/min、{{ model.outputTorque.toFixed(1) }} N·m</text>
+        <text x="42" y="498" class="tiny">理想功率流按 T₂=T₁·i·η 计算；结构层、运动层和能量层必须同时校核。</text>
       </template>
       <template v-else-if="type==='mobility'">
         <text x="40" y="47" class="heading">四个构件 · 四个转动副 · 一个自由度</text>
@@ -77,13 +90,13 @@ const marker=(c:string)=>'url(#'+id+'-'+c+'-arrow)'
         <path d="M88 390H550" class="ground"/><rect x="88" y="391" width="462" height="18" :fill="'url(#'+id+'-hatch)'"/>
         <path d="M270 265H395" class="blue-line vector" :marker-end="marker('blue')"/><path d="M270 140H520" class="green-line vector" :marker-end="marker('green')"/>
         <circle cx="270" cy="390" r="6" fill="var(--red)"/><text x="280" y="420" class="red-text label">P：vP = 0</text>
-        <text x="303" y="250" class="blue-text label">vO = ωR</text><text x="339" y="123" class="green-text label">vA = 2ωR</text>
+        <text x="303" y="250" class="blue-text label">vO = {{ model.centerSpeed.toFixed(3) }} m/s</text><text x="339" y="123" class="green-text label">vA = {{ model.topSpeed.toFixed(3) }} m/s</text>
         <g transform="translate(640 121)"><text class="metric">vQ = ω × PQ</text><text y="52">速度方向垂直于 PQ</text><text y="88">速度大小正比于 |PQ|</text><text y="145" class="small">O 在 P 上方 R，顶点 A 在 P 上方 2R。</text><text y="178" class="small">同一角速度对应不同的线速度。</text><text y="244" class="small">瞬心只是这一瞬间速度为零的位置，</text><text y="274" class="small">并不意味着接触点加速度也为零。</text></g>
-        <text x="70" y="480" class="small">假设轮在固定水平面上无滑动向右滚动，轮体顺时针转动。</text>
+        <text x="70" y="480" class="small">R={{ model.radius.toFixed(0) }} mm，ω={{ model.omega.toFixed(1) }} rad/s；假设轮在固定水平面上无滑动向右滚动。</text>
       </template>
       <template v-else-if="type==='gearstructure'">
         <text x="40" y="45" class="heading">渐开线齿廓：分度圆、基圆与齿厚共同决定轮齿</text>
-        <GearWheel :id="id" :z="28" :m="7" :x="214" :y="245" tint="blue"/>
+        <GearWheel :id="id" :z="model.teeth" :m="gearViewModule" :x="214" :y="245" tint="blue"/>
         <path d="M214 120V90H415M225 245H430M245 280H415" class="dimension"/>
         <text x="431" y="95">齿顶 / 渐开线齿侧</text><text x="442" y="249">轴孔与键槽</text><text x="432" y="287">轮毂与轮辐</text>
         <g transform="translate(635 110)">
@@ -95,14 +108,14 @@ const marker=(c:string)=>'url(#'+id+'-'+c+'-arrow)'
           <text x="87" y="28" class="small">沿轴线剖开</text><text x="80" y="279" class="small">平键传递转矩，轴肩定位</text>
           <path d="M129 111V73" class="dimension"/><text x="178" y="111" class="small">键</text>
         </g>
-        <text x="90" y="430" class="small">z = 28　m = 2 mm（图中同比例放大）</text>
-        <text x="90" y="461">d = mz　　da = m(z + 2)　　df = m(z − 2.5)</text>
+        <text x="90" y="430" class="small">z = {{ model.teeth }}　m = {{ model.module.toFixed(1) }} mm（图形按齿数自适应缩放）</text>
+        <text x="90" y="461">d = {{ model.pitchDiameter.toFixed(1) }} mm　da = {{ model.addendumDiameter.toFixed(1) }} mm　df = {{ model.rootDiameter.toFixed(1) }} mm</text>
         <text x="90" y="490" class="tiny">标准全齿高、无变位示例；轴、键与轮毂尺寸仅用于结构辨认。</text>
       </template>
       <template v-else-if="type==='helical'">
         <text x="40" y="45" class="heading">斜齿轮的齿线沿圆柱面绕行，啮合力具有轴向分量</text>
         <g transform="translate(150 160)">
-          <HelicalGear :id="id"/>
+          <HelicalGear :id="id" :z="model.teeth" :m="model.normalModule" :beta-deg="model.helixAngle"/>
           <text x="-47" y="245" class="small">结构透视：齿线斜向跨过齿宽</text>
         </g>
         <g transform="translate(500 95)">
@@ -110,28 +123,28 @@ const marker=(c:string)=>'url(#'+id+'-'+c+'-arrow)'
           <rect width="166" height="215" :fill="'url(#'+id+'-metal)'" class="outline"/>
           <path v-for="i in 4" :clip-path="'url(#'+id+'-helix-clip)'" :d="'M'+(-60+i*45)+' 215L'+(i*45)+' 0'" class="blue-line" stroke-width="5"/>
           <path d="M90 215V130M90 215L114 129" class="dimension"/><text x="98" y="153" class="amber-text">β</text>
-          <text y="252" class="small">分度圆柱面展开</text><text y="284">mn = mt cosβ</text>
+          <text y="252" class="small">分度圆柱面展开</text><text y="284">β={{ model.helixAngle.toFixed(0) }}°　d={{ model.pitchDiameter.toFixed(1) }} mm</text>
         </g>
         <g transform="translate(755 150)">
           <path :d="d" v-for="d in ['M25 110H139','M25 110V0','M25 110L-24 162']" class="vector blue-line" :marker-end="marker('blue')"/>
           <text x="130" y="135">Fa</text><text x="34" y="5">Ft</text><text x="-40" y="185">Fr</text>
-          <text x="-25" y="240" class="small">Fa = Ft tanβ</text><text x="-25" y="273" class="small">Fr = Ft tanαt</text>
+          <text x="-25" y="228" class="small">Ft = {{ model.tangentialForce.toFixed(0) }} N</text><text x="-25" y="258" class="small">Fa = {{ model.axialForce.toFixed(0) }} N</text><text x="-25" y="288" class="small">Fr = {{ model.radialForce.toFixed(0) }} N</text>
         </g>
         <text x="75" y="465" class="small">β 增大时，轴向力随之增大，需要轴承承担。箭头为分量示意，实际方向由旋向与转向共同确定。</text>
       </template>
       <template v-else-if="type==='belt'">
         <text x="40" y="45" class="heading">带绕在带轮上：摩擦力传递圆周力，张紧决定承载能力</text>
-        <g v-for="p in [{x:150,r:55},{x:425,r:90}]">
-          <circle :cx="p.x" cy="220" :r="p.r" :fill="'url(#'+id+'-metal)'" class="outline"/><circle :cx="p.x" cy="220" :r="p.r-9" class="fine"/>
-          <circle v-for="i in 5" :cx="p.x+p.r*.55*Math.cos(i*Math.PI*2/5)" :cy="220+p.r*.55*Math.sin(i*Math.PI*2/5)" :r="p.r*.13" class="bore"/>
-          <circle :cx="p.x" cy="220" r="16" class="joint"/><circle :cx="p.x" cy="220" r="7" class="bolt"/>
+        <g v-for="p in [{x:beltView.x1,r:beltView.r1},{x:beltView.x2,r:beltView.r2}]">
+          <circle :cx="p.x" :cy="beltView.y" :r="p.r" :fill="'url(#'+id+'-metal)'" class="outline"/><circle :cx="p.x" :cy="beltView.y" :r="Math.max(8,p.r-9)" class="fine"/>
+          <circle v-for="i in 5" :cx="p.x+p.r*.55*Math.cos(i*Math.PI*2/5)" :cy="beltView.y+p.r*.55*Math.sin(i*Math.PI*2/5)" :r="Math.max(4,p.r*.13)" class="bore"/>
+          <circle :cx="p.x" :cy="beltView.y" r="16" class="joint"/><circle :cx="p.x" :cy="beltView.y" r="7" class="bolt"/>
         </g>
-        <path :d="beltPath" stroke="var(--ink)" stroke-width="11" fill="none"/><path :d="beltPath" stroke="var(--blue)" stroke-width="6" fill="none"/>
+        <path :d="beltView.path" stroke="var(--ink)" stroke-width="11" fill="none"/><path :d="beltView.path" stroke="var(--blue)" stroke-width="6" fill="none"/>
         <text x="247" y="124" class="label">紧边 T₁</text><text x="255" y="335" class="label">松边 T₂</text>
-        <path d="M150 355V375M425 355V375M150 368H425" class="dimension"/><text x="255" y="400" class="small">中心距 a</text>
+        <path :d="'M'+beltView.x1+' 350V375M'+beltView.x2+' 350V375M'+beltView.x1+' 368H'+beltView.x2" class="dimension"/><text x="245" y="400" class="small">a={{ model.centerDistance.toFixed(0) }} mm　α₁={{ model.smallWrap.toFixed(1) }}°</text>
         <g transform="translate(630 107)">
-          <text class="metric">Fe = T₁ − T₂</text><text y="48">输出转矩 M = Fe·r</text>
-          <text y="105" class="small">忽略滑动时：v = ω₁r₁ = ω₂r₂</text><text y="144" class="small">小轮包角较小，通常先成为限制。</text>
+          <text class="metric">Fe = {{ model.effectiveForce.toFixed(0) }} N</text><text y="48">M₁ = {{ model.inputTorque.toFixed(1) }} N·m</text>
+          <text y="94" class="small">i={{ model.ratio.toFixed(2) }}　n₂={{ model.outputSpeed.toFixed(0) }} r/min</text><text y="126" class="small">带长 L≈{{ model.beltLength.toFixed(0) }} mm</text><text y="158" class="small">小轮包角较小，通常先成为限制。</text>
           <path d="M40 210L105 274L170 210" :fill="'url(#'+id+'-metal)'" class="outline"/>
           <path d="M66 211L105 248L144 211Z" fill="var(--blue)" class="outline"/>
           <text x="3" y="315" class="small">V 带截面：两侧面与轮槽接触</text>
@@ -140,14 +153,15 @@ const marker=(c:string)=>'url(#'+id+'-'+c+'-arrow)'
       </template>
       <template v-else-if="type==='frames'">
         <text x="40" y="45" class="heading">每根杆都有自己的局部坐标系：变换按运动链依次相乘</text>
-        <path d="M150 365L265 165L488 235" class="rod-shadow"/><path d="M150 365L265 165L488 235" class="rod"/>
-        <g v-for="(p,i) in [[150,365,-60],[265,165,-60],[488,235,17.4]]" :transform="'translate('+p[0]+' '+p[1]+')'">
+        <path :d="linePath([frameView.base,frameView.elbow,frameView.end])" class="rod-shadow"/><path :d="linePath([frameView.base,frameView.elbow,frameView.end])" class="rod"/>
+        <g v-for="(p,i) in frameView.joints" :transform="'translate('+p.x+' '+p.y+')'">
           <circle r="13" class="joint"/><circle r="4" class="bolt"/>
-          <g :transform="'rotate('+(i===0?0:p[2])+')'"><path d="M0 0H90" class="red-line vector" :marker-end="marker('red')"/><path d="M0 0V-85" class="green-line vector" :marker-end="marker('green')"/></g>
+          <g :transform="'rotate('+p.rotation+')'"><path d="M0 0H90" class="red-line vector" :marker-end="marker('red')"/><path d="M0 0V-85" class="green-line vector" :marker-end="marker('green')"/></g>
           <text x="-27" y="33" class="small">O{{ i }}</text>
         </g>
         <g transform="translate(635 127)"><text class="metric">⁰T₂ = ⁰T₁ · ¹T₂</text><text y="56" class="small">列向量约定：从右向左作用。</text><text y="107">局部坐标 → 基坐标</text><text y="144" class="small">⁰p = ⁰T₁ · ¹T₂ · ²p</text><text y="204">平移与旋转通常不能交换顺序。</text><text y="260" class="small">红轴 x，绿轴 y；z 轴垂直图面。</text></g>
-        <text x="78" y="470" class="small">这里选用贴附在杆上的平面局部坐标系，用于理解齐次变换；具体 D-H 坐标系需按约定另行建立。</text>
+        <text x="78" y="458" class="small">θ₁={{ model.theta1.toFixed(0) }}°　θ₂={{ model.theta2.toFixed(0) }}°　末端 p=[{{ model.end.x.toFixed(1) }}, {{ model.end.y.toFixed(1) }}] mm</text>
+        <text x="78" y="488" class="tiny">局部坐标系随杆件转动；具体 D-H 坐标系仍需按统一约定建立。</text>
       </template>
       <template v-else-if="type==='motion-pairs'">
         <text x="40" y="45" class="heading">结构画出来，约束才看得清</text>
@@ -205,7 +219,8 @@ const marker=(c:string)=>'url(#'+id+'-'+c+'-arrow)'
           <path d="M65 263V283M280 263V283M65 276H280" class="dimension"/><text x="155" y="303">距离 l</text>
           <text x="8" y="342" class="small">等大反向的力分处不同平面：合力为零，力偶不为零。</text>
         </g>
-        <text x="68" y="487">双面配重须同时满足 Σmr = 0 与 Σmrl = 0（均为矢量关系）。</text>
+        <text x="68" y="470">m·r={{ model.unbalance.toFixed(0) }} g·mm　F={{ model.centrifugalForce.toFixed(1) }} N　M={{ model.couple.toFixed(2) }} N·m</text>
+        <text x="68" y="500" class="small">双面配重须同时满足 Σmr = 0 与 Σmrl = 0（均为矢量关系）。</text>
       </template>
       <template v-else-if="type==='intermittent'">
         <text x="40" y="45" class="heading">间歇运动的关键：驱动时前进，返回或脱离时可靠保持</text>

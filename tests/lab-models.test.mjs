@@ -21,10 +21,58 @@ import {
   challenges,
   checkChallenge,
 } from "../docs/.vitepress/theme/utils/challenge-models.mjs";
+import { plateSnapshot } from "../docs/.vitepress/theme/utils/plate-models.mjs";
 const near = (a, b, tol = 1e-8) =>
   assert.ok(Math.abs(a - b) < tol, `${a} != ${b} (tol ${tol})`);
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 const h = 1e-5;
+
+test("interactive structure plates preserve their physical relationships", () => {
+  const gear = plateSnapshot("gearstructure", { teeth: 36, module: 2.5 });
+  near(gear.pitchDiameter, 90);
+  near(gear.addendumDiameter, 95);
+  near(gear.rootDiameter, 83.75);
+
+  const helical = plateSnapshot("helical", {
+    teeth: 24,
+    normalModule: 2,
+    helixAngle: 30,
+    torque: 120,
+  });
+  near(helical.pitchDiameter, 48 / Math.cos(Math.PI / 6));
+  near(helical.axialForce / helical.tangentialForce, Math.tan(Math.PI / 6));
+
+  const belt = plateSnapshot("belt", {
+    smallDiameter: 140,
+    largeDiameter: 280,
+    centerDistance: 600,
+    inputSpeed: 960,
+    tightForce: 900,
+    slackForce: 300,
+  });
+  near(belt.ratio, 2);
+  near(belt.outputSpeed, 480);
+  near(belt.effectiveForce, 600);
+  near(belt.inputTorque, 42);
+
+  const frames = plateSnapshot("frames", {
+    link1: 200,
+    link2: 100,
+    theta1: 0,
+    theta2: 90,
+  });
+  near(frames.end.x, 200);
+  near(frames.end.y, 100);
+
+  const balance = plateSnapshot("rotor-balance", {
+    mass: 100,
+    radius: 50,
+    speed: 600,
+    planeDistance: 200,
+  });
+  near(balance.unbalance, 5000);
+  near(balance.couple, balance.centrifugalForce * 0.2);
+});
 
 test("experiment export snapshots stay finite for every unified lab", () => {
   const cases = [
